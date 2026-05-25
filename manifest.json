@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "Zenit — Chess.com to Lichess Analyzer",
+  "version": "1.0.0",
+  "description": "Automatically detects finished Chess.com games and opens them in a Lichess analysis board.",
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://*.chess.com/*",
+    "*://*.lichess.org/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.chess.com/*"],
+      "js": ["shared/utils.js", "shared/pgn-parser.js", "content.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.lichess.org/*"],
+      "js": ["shared/utils.js", "shared/theme-manager.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.lichess.org/analysis/*"],
+      "js": ["lichess.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "assets/icon.svg"
+  },
+  "icons": {
+    "16": "assets/icon.svg",
+    "48": "assets/icon.svg",
+    "128": "assets/icon.svg"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["themes/assets/*", "assets/*"],
+      "matches": ["*://*.lichess.org/*"]
+    }
+  ]
+}
